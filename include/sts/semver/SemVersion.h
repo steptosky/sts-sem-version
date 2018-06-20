@@ -35,8 +35,8 @@
 #include <tuple>
 #include <regex>
 
-#ifdef _MSC_FULL_VER
-#   if _MSC_FULL_VER >= 180021114 // (VS 2013)
+#ifdef _MSC_VER
+#   if _MSC_VER > 1800 // (VS 2013)
 #       define STS_SEMVER_NOEXCEPT noexcept
 #   else
 #       define STS_SEMVER_NOEXCEPT
