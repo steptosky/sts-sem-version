@@ -264,33 +264,41 @@ namespace semver {
         /*!
          * \details Parses string.
          * \param [in] version 
-         * \return true if successful otherwise false.
+         * \return valid SemVersion if successful otherwise invalid.
+         * \code 
+         *     SemVersion ver = SemVersion::parse("string")
+         *     if(ver){
+         *         ... // valid
+         *     }
+         * \endcode
+         * \link SemVersion::operator bool() const \endlink
          */
-        bool parse(const char * version) {
-            if (!version) {
-                clear();
-                return false;
-            }
-            return parse(std::string(version));
+        static SemVersion parse(const char * version) {
+            return version ? parse(std::string(version)) : SemVersion();
         }
 
         /*!
          * \details Parses string.
          * \param [in] version
-         * \return true if successful otherwise false.
+         * \return valid SemVersion if successful otherwise invalid.
+         * \code 
+         *     SemVersion ver = SemVersion::parse("string")
+         *     if(ver){
+         *         ... // valid
+         *     }
+         * \endcode
+         * \link SemVersion::operator bool() const \endlink
          */
-        bool parse(const std::string & version) {
-            clear();
-            auto piecesMatch = std::smatch();
-            if (!regex_match(version, piecesMatch, mRegex)) {
-                return false;
+        static SemVersion parse(const std::string & version) {
+            auto match = std::smatch();
+            if (!regex_match(version, match, mRegex)) {
+                return SemVersion();
             }
-            set(atoi(piecesMatch[1].str().c_str()),
-                atoi(piecesMatch[2].str().c_str()),
-                atoi(piecesMatch[3].str().c_str()),
-                piecesMatch[4],
-                piecesMatch[5]);
-            return true;
+            return SemVersion(atoi(match[1].str().c_str()),
+                              atoi(match[2].str().c_str()),
+                              atoi(match[3].str().c_str()),
+                              match[4],
+                              match[5]);
         }
 
         // @}
@@ -326,6 +334,7 @@ namespace semver {
             mBuild.clear();
         }
 
+        // @}
         //---------------------------------------------------------------
         // @{
 

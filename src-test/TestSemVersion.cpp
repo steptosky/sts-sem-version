@@ -299,8 +299,8 @@ TEST(SemVersion, lower_or_equals) {
 /**************************************************************************************************/
 
 TEST(SemVersion, parse_1) {
-    SemVersion v(1, 2, 3, "test1", "test2");
-    ASSERT_NO_THROW(ASSERT_FALSE(v.parse(nullptr)));
+    SemVersion v = SemVersion::parse(nullptr);
+    ASSERT_FALSE(v);
     ASSERT_EQ(0, v.mMajor);
     ASSERT_EQ(0, v.mMinor);
     ASSERT_EQ(0, v.mPatch);
@@ -309,8 +309,8 @@ TEST(SemVersion, parse_1) {
 }
 
 TEST(SemVersion, parse_2) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_TRUE(v.parse("1.2.3-test1+test2")));
+    SemVersion v = SemVersion::parse("1.2.3-test1+test2");
+    ASSERT_TRUE(v);
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
     ASSERT_EQ(3, v.mPatch);
@@ -319,8 +319,8 @@ TEST(SemVersion, parse_2) {
 }
 
 TEST(SemVersion, parse_3) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_TRUE(v.parse("1.2.3-test1")));
+    SemVersion v = SemVersion::parse("1.2.3-test1");
+    ASSERT_TRUE(v);
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
     ASSERT_EQ(3, v.mPatch);
@@ -329,8 +329,8 @@ TEST(SemVersion, parse_3) {
 }
 
 TEST(SemVersion, parse_4) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_TRUE(v.parse("1.2.3")));
+    SemVersion v = SemVersion::parse("1.2.3");
+    ASSERT_TRUE(v);
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
     ASSERT_EQ(3, v.mPatch);
@@ -339,8 +339,8 @@ TEST(SemVersion, parse_4) {
 }
 
 TEST(SemVersion, parse_5) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_TRUE(v.parse("1.2.3-test1.test1+test2.test2")));
+    SemVersion v = SemVersion::parse("1.2.3-test1.test1+test2.test2");
+    ASSERT_TRUE(v);
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
     ASSERT_EQ(3, v.mPatch);
@@ -349,8 +349,8 @@ TEST(SemVersion, parse_5) {
 }
 
 TEST(SemVersion, parse_6) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_FALSE(v.parse("1.2.3-+")));
+    SemVersion v = SemVersion::parse("1.2.3-+");
+    ASSERT_FALSE(v);
     ASSERT_EQ(0, v.mMajor);
     ASSERT_EQ(0, v.mMinor);
     ASSERT_EQ(0, v.mPatch);
@@ -361,8 +361,8 @@ TEST(SemVersion, parse_6) {
 //-------------------------------------------------------------------------
 
 TEST(SemVersion, parse_7) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_FALSE(v.parse("1.2.3-[test1]+[test2]")));
+    SemVersion v = SemVersion::parse("1.2.3-[test1]+[test2]");
+    ASSERT_FALSE(v);
     ASSERT_EQ(0, v.mMajor);
     ASSERT_EQ(0, v.mMinor);
     ASSERT_EQ(0, v.mPatch);
@@ -371,8 +371,8 @@ TEST(SemVersion, parse_7) {
 }
 
 TEST(SemVersion, parse_8) {
-    SemVersion v;
-    ASSERT_NO_THROW(ASSERT_FALSE(v.parse("1.2.3-[ test1 ]+[ test2 ]")));
+    SemVersion v = SemVersion::parse("1.2.3-[ test1 ]+[ test2 ]");
+    ASSERT_FALSE(v);
     ASSERT_EQ(0, v.mMajor);
     ASSERT_EQ(0, v.mMinor);
     ASSERT_EQ(0, v.mPatch);
