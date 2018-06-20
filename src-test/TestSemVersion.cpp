@@ -36,7 +36,7 @@ using namespace sts::semver;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************/
 
-TEST(SemVersion, constrictor_default) {
+TEST(SemVersion, constructor_default) {
     SemVersion v;
     ASSERT_EQ(0, v.mMajor);
     ASSERT_EQ(0, v.mMinor);
@@ -45,7 +45,7 @@ TEST(SemVersion, constrictor_default) {
     ASSERT_EQ(0, v.mBuild.length());
 }
 
-TEST(SemVersion, constrictor_init_1) {
+TEST(SemVersion, constructor_init_1) {
     SemVersion v(1, 2, 3);
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
@@ -54,7 +54,7 @@ TEST(SemVersion, constrictor_init_1) {
     ASSERT_EQ(0, v.mBuild.length());
 }
 
-TEST(SemVersion, constrictor_init_2) {
+TEST(SemVersion, constructor_init_2) {
     SemVersion v(1, 2, 3, "pre", "build");
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
@@ -63,13 +63,71 @@ TEST(SemVersion, constrictor_init_2) {
     ASSERT_STREQ("build", v.mBuild.c_str());
 }
 
-TEST(SemVersion, constrictor_init_3) {
+TEST(SemVersion, constructor_init_3) {
     SemVersion v(1, 2, 3, std::string("pre"), std::string("build"));
     ASSERT_EQ(1, v.mMajor);
     ASSERT_EQ(2, v.mMinor);
     ASSERT_EQ(3, v.mPatch);
     ASSERT_STREQ("pre", v.mPreRelease.c_str());
     ASSERT_STREQ("build", v.mBuild.c_str());
+}
+
+/**************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/**************************************************************************************************/
+
+TEST(SemVersion, constructor_copy) {
+    const SemVersion v1(1, 2, 3, "pre", "build");
+    SemVersion v2(v1);
+    ASSERT_EQ(1, v2.mMajor);
+    ASSERT_EQ(2, v2.mMinor);
+    ASSERT_EQ(3, v2.mPatch);
+    ASSERT_STREQ("pre", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build", v2.mBuild.c_str());
+}
+
+TEST(SemVersion, constructor_move) {
+    SemVersion v1(1, 2, 3, "pre", "build");
+    SemVersion v2(std::move(v1));
+    ASSERT_EQ(1, v2.mMajor);
+    ASSERT_EQ(2, v2.mMinor);
+    ASSERT_EQ(3, v2.mPatch);
+    ASSERT_STREQ("pre", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build", v2.mBuild.c_str());
+}
+
+TEST(SemVersion, operator_copy) {
+    const SemVersion v1(1, 2, 3, "pre1", "build1");
+    SemVersion v2(4, 5, 6, "pre2", "build2");
+    ASSERT_EQ(4, v2.mMajor);
+    ASSERT_EQ(5, v2.mMinor);
+    ASSERT_EQ(6, v2.mPatch);
+    ASSERT_STREQ("pre2", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build2", v2.mBuild.c_str());
+
+    v2 = v1;
+    ASSERT_EQ(1, v2.mMajor);
+    ASSERT_EQ(2, v2.mMinor);
+    ASSERT_EQ(3, v2.mPatch);
+    ASSERT_STREQ("pre1", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build1", v2.mBuild.c_str());
+}
+
+TEST(SemVersion, operator_move) {
+    SemVersion v1(1, 2, 3, "pre1", "build1");
+    SemVersion v2(4, 5, 6, "pre2", "build2");
+    ASSERT_EQ(4, v2.mMajor);
+    ASSERT_EQ(5, v2.mMinor);
+    ASSERT_EQ(6, v2.mPatch);
+    ASSERT_STREQ("pre2", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build2", v2.mBuild.c_str());
+
+    v2 = std::move(v1);
+    ASSERT_EQ(1, v2.mMajor);
+    ASSERT_EQ(2, v2.mMinor);
+    ASSERT_EQ(3, v2.mPatch);
+    ASSERT_STREQ("pre1", v2.mPreRelease.c_str());
+    ASSERT_STREQ("build1", v2.mBuild.c_str());
 }
 
 /**************************************************************************************************/

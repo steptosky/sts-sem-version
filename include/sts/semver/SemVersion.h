@@ -35,6 +35,16 @@
 #include <tuple>
 #include <regex>
 
+#ifdef _MSC_FULL_VER
+#   if _MSC_FULL_VER >= 180021114 // (VS 2013)
+#       define STS_SEMVER_NOEXCEPT noexcept
+#   else
+#       define STS_SEMVER_NOEXCEPT
+#   endif
+#else
+#   define STS_SEMVER_NOEXCEPT noexcept
+#endif
+
 namespace sts {
 namespace semver {
 
@@ -61,6 +71,16 @@ namespace semver {
 
         SemVersion() = default;
 
+        SemVersion(const SemVersion &) = default;
+
+        // note: just '= default' doesn't work in VS 2013 
+        SemVersion(SemVersion && move) STS_SEMVER_NOEXCEPT
+            : mMajor(move.mMajor),
+              mMinor(move.mMinor),
+              mPatch(move.mPatch),
+              mPreRelease(std::move(move.mPreRelease)),
+              mBuild(std::move(move.mBuild)) {}
+
         SemVersion(const uint major, const uint minor, const uint patch)
             : mMajor(major),
               mMinor(minor),
@@ -81,6 +101,24 @@ namespace semver {
               mPatch(patch),
               mPreRelease(preRelease),
               mBuild(build) {}
+
+        ~SemVersion() = default;
+
+        // @}
+        //---------------------------------------------------------------
+        // @{
+
+        SemVersion & operator=(const SemVersion &) = default;
+
+        // note: just '= default' doesn't work in VS 2013 
+        SemVersion & operator=(SemVersion && move) STS_SEMVER_NOEXCEPT {
+            mMajor = move.mMajor;
+            mMinor = move.mMinor;
+            mPatch = move.mPatch;
+            mPreRelease = std::move(move.mPreRelease);
+            mBuild = std::move(move.mBuild);
+            return *this;
+        }
 
         // @}
         //---------------------------------------------------------------
