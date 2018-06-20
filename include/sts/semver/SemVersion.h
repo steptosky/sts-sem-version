@@ -36,10 +36,10 @@
 #include <regex>
 
 #ifdef _MSC_VER
-#   if _MSC_VER > 1800 // (VS 2013)
-#       define STS_SEMVER_NOEXCEPT noexcept
+#   if _MSC_VER < 1900 // (VS 2015)
+#       define STS_SEMVER_NOEXCEPT 
 #   else
-#       define STS_SEMVER_NOEXCEPT
+#       define STS_SEMVER_NOEXCEPT noexcept
 #   endif
 #else
 #   define STS_SEMVER_NOEXCEPT noexcept
