@@ -74,7 +74,7 @@ set(ProjectOrganizationWebLink "www.steptosky.com")
 
 set(ProjectName "Semantic Versioning library")
 set(ProjectShortName "sts-semver")
-set(ProjectDescription "Cross-platform C++ Library for working with the Semantic Versioning. https://semver.org")
+set(ProjectDescription "Cross-platform C++ header only library for working with the Semantic Versioning. https://semver.org")
 set(ProjectWebLink "www.steptosky.com")
 set(ProjectSourcesWebLink "https://github.com/steptosky/sts-semver")
 

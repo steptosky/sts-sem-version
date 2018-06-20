@@ -1,4 +1,4 @@
-# Cross-platform header only C++ Library for working with Semantic Versioning.
+# Cross-platform header only C++ library for working with Semantic Versioning.
 
 
 | CI        | master | develop | last commit |
@@ -9,7 +9,7 @@
 ---
 
 #### common
-- [semver.org](https://semver.org) 
+- Specification [semver.org](https://semver.org) 
 - The library is distributed under 
 [BSD (3-Clause)](http://opensource.org/licenses/BSD-3-Clause) 
 license for more information read the [license](license.txt) file.
@@ -123,7 +123,7 @@ cd ../
 ```
 
 
-#### Build with the conan 'create' scripts examples:
+#### Build with the conan 'create' script example:
 This is just the example for the windows!  
 Probably you will need to adjust it for your purposes.
 ##### Windows (.bat) For Visual Studio 2017 x64
@@ -136,6 +136,15 @@ conan create . steptosky/develop ^
      -s build_type=Release ^
      -e CONAN_TEST_REPORT_DIR="report/conan-test" ^
      -e CONAN_TEST_LIB=1
+     
+conan create . steptosky/develop ^
+     -s compiler="Visual Studio" ^
+     -s compiler.version=15 ^
+     -s compiler.runtime=MDd ^
+     -s build_type=Debug ^
+     -e CONAN_TEST_REPORT_DIR="report/conan-test" ^
+     -e CONAN_TEST_LIB=1
+     
 
 pause
 :: remove build dir

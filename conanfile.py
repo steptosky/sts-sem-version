@@ -47,7 +47,7 @@ class LibConan(ConanFile):
     name = 'sts-semver'
     url = 'https://github.com/steptosky/sts-semver'
     license = 'BSD 3-Clause'
-    description = "Cross-platform C++ Library for working with the Semantic Versioning. https://semver.org"
+    description = "Cross-platform C++ header only library for working with the Semantic Versioning. https://semver.org"
     author = 'StepToSky <info@steptosky.com>'
     settings = "os", "compiler", "build_type", "arch"
     default_options = 'gtest:shared=False', 'gtest:build_gmock=True'
