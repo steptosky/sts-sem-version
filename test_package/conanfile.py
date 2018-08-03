@@ -2,7 +2,7 @@
 # //////////////////////////////////////////////////////////////////////////////////#
 # ----------------------------------------------------------------------------------#
 #
-#  Copyright (C) 2017, StepToSky
+#  Copyright (C) 2018, StepToSky
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@ import os
 class LibReuseConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
+    exec_name = "conan-test-package"
     artifact_name = "sts-semver"
 
     def build(self):
@@ -48,8 +49,21 @@ class LibReuseConan(ConanFile):
         cmake.configure()
         cmake.build()
 
+    def imports(self):
+        self.copy(pattern="*.dll", dst="bin", src="Release")
+        self.copy(pattern="*.pdb", dst="bin", src="Release")
+        self.copy(pattern="*.dylib", dst="bin", src="Release")
+        self.copy(pattern="*.so", dst="bin", src="Release")
+        self.copy(pattern="*.a", dst="bin", src="Release")
+
+        self.copy(pattern="*.dll", dst="bin", src="Debug")
+        self.copy(pattern="*.pdb", dst="bin", src="Debug")
+        self.copy(pattern="*.dylib", dst="bin", src="Debug")
+        self.copy(pattern="*.so", dst="bin", src="Debug")
+        self.copy(pattern="*.a", dst="bin", src="Debug")
+
     def test(self):
-        self.run("cd bin && .%smytest" % os.sep)
+        self.run("cd bin && .%s%s" % (os.sep, self.exec_name))
         assert os.path.exists(os.path.join(self.deps_cpp_info[self.artifact_name].rootpath, "licenses", "license.txt"))
 
 # ----------------------------------------------------------------------------------#

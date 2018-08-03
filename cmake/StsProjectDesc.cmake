@@ -72,29 +72,37 @@ set(ProjectOrganizationWebLink "www.steptosky.com")
 #----------------------------------------------------------------------------------#
 # Project info
 
-set(ProjectName "Semantic Versioning library")
-set(ProjectShortName "sts-semver")
+set(ProjectName "sts-semver")
+set(ProjectFullName "Semantic Versioning library")
 set(ProjectDescription "Cross-platform C++ header only library for working with the Semantic Versioning. https://semver.org")
 set(ProjectWebLink "www.steptosky.com")
 set(ProjectSourcesWebLink "https://github.com/steptosky/sts-semver")
 
+set(ProjectGroupId "steptosky")
+set(ProjectId ${ProjectName})
+
 #----------------------------------------------------------------------------------#
 # Version / Dependency's system
 
+# Set it to ON if you are in unstable branch otherwise set it to OFF
+set(ProjectVersionSnapshot ON)
 set(ProjectVersionMajor 0)
 set(ProjectVersionMinor 1)
 set(ProjectVersionPatch 0)
 set(ProjectVersion "${ProjectVersionMajor}.${ProjectVersionMinor}.${ProjectVersionPatch}")
-set(ProjectReleaseType "alpha") # You can use any string you wish
 
-set(ProjectGroupId "steptosky")
-set(ProjectId ${ProjectShortName})
+# You can use any string you wish, 
+# but i will be changed to snapshot if it is enabled. 
+set(ProjectReleaseType "alpha")
+if (ProjectVersionSnapshot)
+    set(ProjectReleaseType "snapshot")
+endif()
 
 #----------------------------------------------------------------------------------#
 # License
 
 set(ProjectAuthor "StepToSky")
-set(ProjectCopyRight "Copyright ${ProjectAuthor} ${_curr_y_}")
+set(ProjectCopyRight "Copyright ${ProjectAuthor} 2018-${_curr_y_}")
 set(ProjectLicenseType "BSD 3-Clause")
 
 #----------------------------------------------------------------------------------#
@@ -111,7 +119,7 @@ list(APPEND ProjectContributors "StepToSky <info@steptosky.com>")
 # example, the urls are empty: "XplnObj||Copyright (c) 2017 StepToSky||BSD|"
 
 set(ProjectLibraries "")
-                                                                                  
+
 #----------------------------------------------------------------------------------#
 # Other
 
@@ -119,13 +127,13 @@ set(ProjectLibraries "")
 set(ProjectVcsType "git") 
 
 # Prefix for the defines.
-set(ProjectDefPrefix "STS_SEMVER_") 
+set(ProjectDefinePrefix "STS_SEMVER_") 
 
 #----------------------------------------------------------------------------------#
 # Checking
 
 if(NOT ProjectId)
-	message(FATAL_ERROR "ProjectId is not specified")
+    message(FATAL_ERROR "ProjectId is not specified")
 endif()
 
 #----------------------------------------------------------------------------------#

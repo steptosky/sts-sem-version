@@ -2,7 +2,7 @@
 # //////////////////////////////////////////////////////////////////////////////////#
 # ----------------------------------------------------------------------------------#
 #
-#  Copyright (C) 2017, StepToSky
+#  Copyright (C) 2018, StepToSky
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -35,11 +35,8 @@
 # ----------------------------------------------------------------------------------#
 
 import os
-from conans import ConanFile, CMake
-from conanfile_vcs import ConanVcs
-
-vcs_data = ConanVcs()
-vcs_data.load_vcs_data()
+from conans import ConanFile, CMake, tools
+from vcs_info import VcsInfo
 
 
 class LibConan(ConanFile):
@@ -50,44 +47,45 @@ class LibConan(ConanFile):
     description = "Cross-platform C++ header only library for working with the Semantic Versioning. https://semver.org"
     author = 'StepToSky <info@steptosky.com>'
     settings = "os", "compiler", "build_type", "arch"
-    default_options = 'gtest:shared=False', 'gtest:build_gmock=True'
-    exports = 'vcs_data', 'conanfile_vcs.py'
-    exports_sources = 'CMakeLists.txt', 'src/*', 'src-test/*', \
-                      'include/*', 'cmake/*', 'license*'
-    no_copy_source = True
+    options = {'shared': [True, False]}
+    default_options = 'shared=False', 'gtest:shared=False', 'gtest:build_gmock=True'
+    exports = 'vcs_info.py', 'vcs_data'
+    exports_sources = 'CMakeLists.txt', 'src/*', 'src-test/*', 'include/*', 'cmake/*', 'license*'
     generators = 'cmake'
 
-    build_test_var = "CONAN_TEST_LIB"
-    test_dir_var = "CONAN_TEST_REPORT_DIR"
+    build_test_var = "CONAN_BUILD_TESTING"
+    test_dir_var = "CONAN_TESTING_REPORT_DIR"
+    vcs_data = VcsInfo()
 
     def configure(self):
         if self.settings.compiler == "Visual Studio" and float(str(self.settings.compiler.version)) < 12:
             raise Exception("Visual Studio 12 (2013) or higher is required")
 
     def requirements(self):
-        if os.getenv(self.build_test_var, "") == "1":
+        if os.getenv(self.build_test_var, "0") == "1":
             self.requires('gtest/1.8.0@bincrafters/stable', private=True)
 
     def build(self):
-        build_tests = os.getenv(self.build_test_var, "")
+        build_testing = os.getenv(self.build_test_var, "0")
         test_dir = os.getenv(self.test_dir_var, "")
         cmake = CMake(self)
-        vcs_data.setup_cmake(cmake)
-        cmake.definitions["BUILD_TESTS"] = 'ON' if build_tests == "1" else 'OFF'
+        self.vcs_data.setup_cmake(cmake)
+        cmake.definitions["BUILD_TESTING"] = 'ON' if build_testing == "1" else 'OFF'
         if test_dir:
-            cmake.definitions["TEST_REPORT_DIR"] = test_dir
+            cmake.definitions["TESTING_REPORT_DIR"] = test_dir
         cmake.configure()
         cmake.build()
         cmake.install()
-        if build_tests == "1":
+        if build_testing == "1":
             cmake.test()
 
     def package(self):
         self.copy("license*", src=".", dst="licenses", ignore_case=True, keep_path=False)
-        self.copy("*.h")
 
-    def package_id(self):
-        self.info.header_only()
+    def package_info(self):
+        libDir = '%s' % self.settings.build_type
+        self.cpp_info.libdirs = [libDir]
+        self.cpp_info.libs = tools.collect_libs(self, libDir)
 
 # ----------------------------------------------------------------------------------#
 # //////////////////////////////////////////////////////////////////////////////////#

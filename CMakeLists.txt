@@ -45,12 +45,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #----------------------------------------------------------------------------------#
 # Solution
 
-project("sts-semver" LANGUAGES "CXX")
+include(StsProjectDesc)
+project(${ProjectId} LANGUAGES "CXX")
 
 #----------------------------------------------------------------------------------#
 # Info file
 
-include(StsProjectDesc)
 include(StsInfoFilesGenerator)
 genInfoFile(StsProjectDesc "${CMAKE_SOURCE_DIR}/include/sts/semver/Info.h")
 
@@ -59,15 +59,17 @@ genInfoFile(StsProjectDesc "${CMAKE_SOURCE_DIR}/include/sts/semver/Info.h")
 #----------------------------------------------------------------------------------#
 # options 
 
-if (NOT TEST_REPORT_DIR)
-    set(TEST_REPORT_DIR ${CMAKE_SOURCE_DIR}/reports/tests)
+if (NOT TESTING_REPORT_DIR)
+    set(TESTING_REPORT_DIR "${CMAKE_SOURCE_DIR}/reports/tests")
 endif()
 
 if (NOT BUILD_SHARED_LIBS)
     set (BUILD_SHARED_LIBS OFF)
 endif()
 
-option(BUILD_TESTS "Build all of it's own tests." OFF) 
+if (NOT BUILD_TESTING)
+    set (BUILD_TESTING OFF)
+endif()
 
 message(STATUS "==============================================")
 if (NOT CMAKE_BUILD_TYPE)
@@ -75,9 +77,9 @@ if (NOT CMAKE_BUILD_TYPE)
 else()
     message(STATUS "Build type = ${CMAKE_BUILD_TYPE}")
 endif()
-message(STATUS "Build tests = ${BUILD_TESTS}")
+message(STATUS "Build testing = ${BUILD_TESTING}")
 message(STATUS "Shared lib = ${BUILD_SHARED_LIBS}")
-message(STATUS "Test report dir = ${TEST_REPORT_DIR}")
+message(STATUS "Testing report dir = ${TESTING_REPORT_DIR}")
 message(STATUS "Installation prefix = ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "==============================================")
 
@@ -88,21 +90,8 @@ message(STATUS "==============================================")
 
 include(StsConan)
 conan_cmake_run(CONANFILE conanfile.py
-                BASIC_SETUP CMAKE_TARGETS
+                BASIC_SETUP CMAKE_TARGETS KEEP_RPATHS
                 BUILD outdated)
-
-#----------------------------------------------------------------------------------#
-#//////////////////////////////////////////////////////////////////////////////////#
-#----------------------------------------------------------------------------------#
-# help targets
-
-add_custom_target("Clean-Install-Dir"
-    COMMAND cmake -E remove_directory ${CMAKE_INSTALL_PREFIX}
-)
-
-add_custom_target("Clean-Tests-Report"
-    COMMAND cmake -E remove_directory ${TEST_REPORT_DIR}
-)
 
 #----------------------------------------------------------------------------------#
 #//////////////////////////////////////////////////////////////////////////////////#
@@ -110,7 +99,7 @@ add_custom_target("Clean-Tests-Report"
 # sub projects
 
 add_subdirectory(src)
-if(BUILD_TESTS)
+if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(src-test)
 endif()
