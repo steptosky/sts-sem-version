@@ -94,11 +94,14 @@ class VcsInfo:
             print("[ERROR] Cannot get git repo info. Reason: %s" % ex)
             raise ex
         if re.search(r'HEAD', self.vcs_branch, re.IGNORECASE):
-            print ("[VCS_INFO] ENV BRANCH: <%s>" % os.environ.get("GIT_BRANCH"))
             self.vcs_branch = os.environ.get("GIT_BRANCH")
             if not self.vcs_branch:
-                raise Exception('[ERROR] Current branch name is HEAD and the GIT_BRANCH env var is not set.')
-            print('[VCS_INFO] Branch name has been read from env variable: GIT_BRANCH')
+                print('[WARNING] Current branch name is HEAD and the GIT_BRANCH env var is not set. '
+                      'Branch name will be set to \'undefined\'')
+                self.vcs_branch = "undefined"
+            else:
+                print ("[VCS_INFO] ENV BRANCH: <%s>" % self.vcs_branch)
+                print('[VCS_INFO] Branch name has been read from env variable: GIT_BRANCH')
         return self.has_actual_info()
 
     @staticmethod
