@@ -74,7 +74,7 @@ function(genInfoFile descriptionFile destinationFile)
     message(STATUS "Info generated ${descriptionFile} -> ${destinationFile}")
     include("${descriptionFile}")
 
-    set(__prfix__ ${ProjectDefPrefix})
+    set(__prfix__ ${ProjectDefinePrefix})
     set(__DECOR__ "//===========================================================================//")
 
     #-------------------------------------------------------------------#
@@ -93,7 +93,7 @@ function(genInfoFile descriptionFile destinationFile)
     set(CONTENT "${CONTENT}/* Organization Info */\n")
     if(IdentificationName)
         set(CONTENT "${CONTENT}#define ${__prfix__}IDENTIFICATION_NAME \"${IdentificationName}\"\n")
-        message(WARNING "IdentificationName is depricated use ArtifactId instead")
+        message(WARNING "IdentificationName is depricated use ProjectId instead")
     endif()
     set(CONTENT "${CONTENT}#define ${__prfix__}ORGANIZATION_NAME \"${ProjectOrganizationName}\"\n")
     set(CONTENT "${CONTENT}#define ${__prfix__}ORGANIZATION_WEBLINK \"${ProjectOrganizationWebLink}\"\n\n")

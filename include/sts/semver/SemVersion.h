@@ -30,10 +30,10 @@
 */
 
 #include <string>
-#include <sstream>
 #include <cstdint>
 #include <tuple>
 #include <regex>
+#include "Export.h"
 
 #ifdef _MSC_VER
 #   if _MSC_VER < 1900 // (VS 2015)
@@ -144,18 +144,7 @@ namespace semver {
          * \param [in] build compare build part.
          * \return True if the versions are equaled otherwise false.
          */
-        bool compare(const SemVersion & other, const bool preRelease = false, const bool build = false) const {
-            if (this->operator!=(other)) {
-                return false;
-            }
-            if (preRelease && mPreRelease != other.mPreRelease) {
-                return false;
-            }
-            if (build && mBuild != other.mBuild) {
-                return false;
-            }
-            return true;
-        }
+        SemVerExp bool compare(const SemVersion & other, bool preRelease = false, bool build = false) const;
 
         /*!
          * \note It compares only major minor and patch parts.
@@ -289,17 +278,7 @@ namespace semver {
          * \endcode
          * \link SemVersion::operator bool() const \endlink
          */
-        static SemVersion parse(const std::string & version) {
-            auto match = std::smatch();
-            if (!regex_match(version, match, mRegex)) {
-                return SemVersion();
-            }
-            return SemVersion(atoi(match[1].str().c_str()),
-                              atoi(match[2].str().c_str()),
-                              atoi(match[3].str().c_str()),
-                              match[4],
-                              match[5]);
-        }
+        SemVerExp static SemVersion parse(const std::string & version);
 
         // @}
         //---------------------------------------------------------------
@@ -311,17 +290,7 @@ namespace semver {
          * \param [in] build add 'build' value if true.
          * \return built string from the values.
          */
-        std::string toString(const bool preRelease = false, const bool build = false) const {
-            std::ostringstream stream;
-            stream << mMajor << '.' << mMinor << '.' << mPatch;
-            if (preRelease && !mPreRelease.empty()) {
-                stream << '-' << mPreRelease;
-            }
-            if (build && !mBuild.empty()) {
-                stream << '+' << mBuild;
-            }
-            return stream.str();
-        }
+        SemVerExp std::string toString(bool preRelease = false, bool build = false) const;
 
         /*!
          * \details Clears all values.
@@ -349,21 +318,9 @@ namespace semver {
 
     private:
 
-        static std::regex mRegex;
+        SemVerExp static const std::regex mRegex;
 
     };
-
-    /**************************************************************************************************/
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**************************************************************************************************/
-
-    std::regex SemVersion::mRegex = std::regex("^(0|[1-9][0-9]*)"
-                                               "\\.(0|[1-9][0-9]*)"
-                                               "\\.(0|[1-9][0-9]*)"
-                                               "(?:\\-([0-9a-z-]+[\\.0-9a-z-]*))?"
-                                               "(?:\\+([0-9a-z-]+[\\.0-9a-z-]*))?",
-                                               std::regex_constants::ECMAScript |
-                                               std::regex_constants::icase);
 
     /**************************************************************************************************/
     ////////////////////////////////////////////////////////////////////////////////////////////////////
