@@ -6,8 +6,6 @@
 
 #### [StsProjectDesc.cmake](cmake/StsProjectDesc.cmake)
 - Set the correct version in the file and check other information there.
-- Check whether `ProjectVersionSnapshot` has the correct value for your branch.
-  It should be `ON` for unstable branches like `feature, develop ...` and `OFF` for stable `master, release ...`.
 
 #### [conanfile.py](conanfile.py)
 - Set the correct version.
