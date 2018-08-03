@@ -74,7 +74,7 @@ set(ProjectOrganizationWebLink "www.steptosky.com")
 
 set(ProjectName "sts-semver")
 set(ProjectFullName "Semantic Versioning library")
-set(ProjectDescription "Cross-platform C++ header only library for working with the Semantic Versioning. https://semver.org")
+set(ProjectDescription "Cross-platform C++ library for working with Semantic Versioning. https://semver.org")
 set(ProjectWebLink "www.steptosky.com")
 set(ProjectSourcesWebLink "https://github.com/steptosky/sts-semver")
 
@@ -85,7 +85,7 @@ set(ProjectId ${ProjectName})
 # Version / Dependency's system
 
 # Set it to ON if you are in unstable branch otherwise set it to OFF
-set(ProjectVersionSnapshot ON)
+set(ProjectVersionSnapshot OFF)
 set(ProjectVersionMajor 0)
 set(ProjectVersionMinor 1)
 set(ProjectVersionPatch 0)
