@@ -140,7 +140,7 @@ probably you will need to adjust them for your purposes.
 ::==========================================================
 :: conan user userName -r remote -p password
 ::==========================================================
-call conan create . stsff/develop ^
+call conan create . stsff/testing ^
      -s compiler="Visual Studio" ^
      -s compiler.version=15 ^
      -s compiler.runtime=MD ^
@@ -151,7 +151,7 @@ call conan create . stsff/develop ^
     --build=stsff-semver ^
     --build=outdated
     
-call conan create . stsff/develop ^
+call conan create . stsff/testing ^
      -s compiler="Visual Studio" ^
      -s compiler.version=15 ^
      -s compiler.runtime=MDd ^
