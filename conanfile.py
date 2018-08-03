@@ -40,7 +40,7 @@ from vcs_info import VcsInfo
 
 
 class LibConan(ConanFile):
-    version = "0.1.0"
+    version = "0.2.0"
     name = 'sts-semver'
     url = 'https://github.com/steptosky/sts-semver'
     license = 'BSD 3-Clause'
