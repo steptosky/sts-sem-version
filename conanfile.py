@@ -40,17 +40,21 @@ from vcs_info import VcsInfo
 
 
 class LibConan(ConanFile):
-    version = "0.2.0"
+    version = "0.2.1"
     name = 'sts-semver'
     url = 'https://github.com/steptosky/sts-semver'
     license = 'BSD 3-Clause'
     description = "Cross-platform C++ library for working with Semantic Versioning. https://semver.org"
     author = 'StepToSky <info@steptosky.com>'
+
     settings = "os", "compiler", "build_type", "arch"
-    options = {'shared': [True, False]}
-    default_options = 'shared=False', 'gtest:shared=False', 'gtest:build_gmock=True'
+
+    options = {'shared': [True, False], "fPIC": [True, False]}
+    default_options = 'shared=False', "fPIC=False", 'gtest:shared=False', 'gtest:build_gmock=True'
+
     exports = 'vcs_info.py', 'vcs_data'
     exports_sources = 'CMakeLists.txt', 'src/*', 'src-test/*', 'include/*', 'cmake/*', 'license*'
+
     generators = 'cmake'
 
     build_test_var = "CONAN_BUILD_TESTING"
@@ -60,6 +64,10 @@ class LibConan(ConanFile):
     def configure(self):
         if self.settings.compiler == "Visual Studio" and float(str(self.settings.compiler.version)) < 12:
             raise Exception("Visual Studio 12 (2013) or higher is required")
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            del self.options.fPIC
 
     def requirements(self):
         if os.getenv(self.build_test_var, "0") == "1":
