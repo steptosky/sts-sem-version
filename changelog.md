@@ -2,6 +2,10 @@
 sts-semver library
 ---------------------------------------------------------------------------
 
+#### 0.2.1 (05.08.2018)
+
+- Added: "fPIC" option for conan.
+
 #### 0.2.0 (03.08.2018)
 
 - Update: The library isn't header only now.
